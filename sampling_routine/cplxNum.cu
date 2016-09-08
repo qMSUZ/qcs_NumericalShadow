@@ -1,5 +1,6 @@
-#include "cplxNum.cuh"
+#include "cplxNum.h"
 
+#if 0
 template <typename T>
 __host__ __device__ struct simpleComplex<T> operator+(const struct simpleComplex<T> &a, const struct simpleComplex<T> &b)
 {
@@ -231,7 +232,7 @@ __host__ __device__  simpleComplex<double> reciprocal(const simpleComplex<double
 }
 
 
-template <typename T> 
+template <typename T>
 __host__ __device__ struct simpleComplex<T> make_simpleComplex (T r, T i)
 {
 	simpleComplex<T> t;
@@ -241,3 +242,239 @@ __host__ __device__ struct simpleComplex<T> make_simpleComplex (T r, T i)
 
 	return t;
 }
+#endif
+
+
+/* specialised version of float type*/
+
+__host__ __device__ simpleComplexFloat operator+(const simpleComplexFloat &a, const simpleComplexFloat &b)
+{
+	simpleComplexFloat t;
+
+	t.x = a.x + b.x;
+	t.y = a.y + b.y;
+
+	return t;
+}
+
+__host__ __device__ simpleComplexFloat operator-(const simpleComplexFloat &a, const simpleComplexFloat &b)
+{
+	simpleComplexFloat t;
+
+	t.x = a.x - b.x;
+	t.y = a.y - b.y;
+
+	return t;
+}
+
+__host__ __device__ simpleComplexFloat operator+(const float &a, const simpleComplexFloat &b)
+{
+	simpleComplexFloat t;
+
+	t.x = a + b.x;
+	t.y = b.y;
+
+	return t;
+}
+
+__host__ __device__  simpleComplexFloat operator-(const float &a, const simpleComplexFloat &b)
+{
+	simpleComplexFloat t;
+
+	t.x = a - b.x;
+	t.y = b.y;
+
+	return t;
+}
+
+__host__ __device__  simpleComplexFloat operator+(const simpleComplexFloat &a, const float &b)
+{
+	simpleComplexFloat t;
+
+	t.x = a.x + b;
+	t.y = a.y ;
+
+	return t;
+}
+
+__host__ __device__  simpleComplexFloat operator-(const simpleComplexFloat &a, const float &b)
+{
+	simpleComplexFloat t;
+
+	t.x = a.x - b;
+	t.y = a.y ;
+
+	return t;
+}
+
+__host__ __device__  simpleComplexFloat operator*(const simpleComplexFloat &a, const simpleComplexFloat &b)
+{
+	simpleComplexFloat t;
+
+	t.x = (a.x * b.x) - (a.y * b.y);
+	t.y = (a.x * b.y) + (a.y * b.x);
+
+	return t;
+}
+
+__host__ __device__  simpleComplexFloat operator*(const float &a, const simpleComplexFloat &b)
+{
+	simpleComplexFloat t;
+
+	t.x = (a * b.x);
+	t.y = (a * b.y);
+
+	return t;
+}
+
+__host__ __device__  simpleComplexFloat operator*(const simpleComplexFloat &a, const float &b)
+{
+	simpleComplexFloat t;
+
+	t.x = (a.x * b);
+	t.y = (a.y * b);
+
+	return t;
+}
+
+__host__ __device__  simpleComplexFloat operator/(const simpleComplexFloat &a, const simpleComplexFloat &b)
+{
+	simpleComplexFloat t;
+
+	float s =  (b.x * b.x) + (b.y * b.y);
+
+	t.x = ((a.x * b.x) + (a.y * b.y)) / s;
+	t.y = ((a.y * b.x) - (a.x * b.y)) / s;
+
+	return t;
+}
+
+__host__ __device__  simpleComplexFloat operator/(const float &_a, const simpleComplexFloat &b)
+{
+	simpleComplexFloat t, a;
+
+	a.x = _a;
+	a.y = 0.0f;
+
+	float s =  (b.x * b.x) + (b.y * b.y);
+
+	t.x = ((a.x * b.x) + (a.y * b.y)) / s;
+	t.y = ((a.y * b.x) - (a.x * b.y)) / s;
+
+	return t;
+}
+
+__host__ __device__  simpleComplexFloat operator/(const simpleComplexFloat &a, const float &_b)
+{
+	simpleComplexFloat t, b;
+
+    b.x = _b;
+    b.y = 0.0;
+
+	float s =  (b.x * b.x) + (b.y * b.y);
+
+	t.x = ((a.x * b.x) + (a.y * b.y)) / s;
+	t.y = ((a.y * b.x) - (a.x * b.y)) / s;
+
+	return t;
+}
+
+__host__ __device__ float simpleComplexMod (const simpleComplexFloat &a)
+{
+	float f;
+
+	f = sqrtf( (a.x * a.x) + (a.y * a.y) );
+
+	return f;
+}
+
+/*
+__host__ __device__  double  simpleComplexMod (const simpleComplexDouble &a)
+{
+	double f;
+
+	f = sqrt( (a.x * a.x) + (a.y * a.y) );
+
+	return f;
+}
+*/
+
+__host__ __device__  simpleComplexFloat sqrt(const simpleComplexFloat &a)
+{
+	float modval;
+	 simpleComplexFloat tmp;
+
+	modval = simpleComplexMod(a);
+
+	tmp.x = sqrt( (modval + a.x) * 0.5f );
+	tmp.y = sqrt( (modval - a.x) * 0.5f );
+
+	return tmp;
+}
+
+__host__ __device__   simpleComplexFloat simpleComplexAdj(const  simpleComplexFloat &a)
+{
+	 simpleComplexFloat t;
+
+	t.x = a.x;
+	t.y = -a.y;
+
+	return t;
+}
+
+/*
+__host__ __device__   simpleComplexDouble simpleComplexAdj(const  simpleComplexDouble &a)
+{
+	 simpleComplexDouble t;
+
+	t.x = a.x;
+	t.y = -a.y;
+
+	return t;
+}
+*/
+
+__host__ __device__   simpleComplexFloat reciprocal(const  simpleComplexFloat &a)
+{
+	 simpleComplexFloat t;
+
+	t.x = a.x / (a.x * a.x + a.y*a.y);
+	t.y = -(a.y / (a.x * a.x + a.y*a.y));
+
+	return t;
+}
+
+/*
+__host__ __device__   simpleComplexDouble reciprocal(const  simpleComplexDouble &a)
+{
+	 simpleComplexDouble t;
+
+	t.x = a.x / (a.x * a.x + a.y*a.y);
+	t.y = -(a.y / (a.x * a.x + a.y*a.y));
+
+	return t;
+}
+*/
+
+
+__host__ __device__  simpleComplexFloat make_simpleComplexFloat (float r, float i)
+{
+	 simpleComplexFloat t;
+
+	t.x = r ;
+	t.y = i ;
+
+	return t;
+}
+
+/*
+__host__ __device__  simpleComplexDouble make_simpleComplexFloat (double r, double i)
+{
+	 simpleComplexDouble t;
+
+	t.x = r ;
+	t.y = i ;
+
+	return t;
+}
+*/
