@@ -64,6 +64,12 @@ struct __align__(8) simpleComplexDouble {
 };
 */
 
+struct __align__(16) simpleComplexDouble {
+	double x;
+	double y;
+};
+
+
 #if 0
 
 //typedef struct __simpleComplexFloat simpleComplexFloat;
@@ -155,5 +161,46 @@ __host__ __device__   simpleComplexFloat sqrt(const  simpleComplexFloat &a);
 
 __host__ __device__   simpleComplexFloat make_simpleComplexFloat (float r, float i);
 //__host__ __device__   simpleComplexDouble make_simpleComplexDouble (double r, double i);
+
+
+/* specialised version of double type*/
+
+__host__ __device__  simpleComplexDouble operator+(const simpleComplexDouble &a, const simpleComplexDouble &b);
+
+__host__ __device__  simpleComplexDouble operator+(const double &a, const  simpleComplexDouble &b);
+
+__host__ __device__  simpleComplexDouble operator+(const  simpleComplexDouble &a, const double &b);
+
+__host__ __device__  simpleComplexDouble operator*(const  simpleComplexDouble &a, const  simpleComplexDouble &b);
+
+__host__ __device__  simpleComplexDouble operator*(const double &a, const  simpleComplexDouble &b);
+
+__host__ __device__  simpleComplexDouble operator*(const  simpleComplexDouble &a, const double &b);
+
+__host__ __device__  simpleComplexDouble operator/(const  simpleComplexDouble &a, const  simpleComplexDouble &b);
+
+__host__ __device__  simpleComplexDouble operator/(const double &_a, const  simpleComplexDouble &b);
+
+__host__ __device__  simpleComplexDouble operator/(const  simpleComplexDouble &a, const double &_b);
+
+
+__host__ __device__  double simpleComplexMod (const  simpleComplexDouble &a);
+//__host__ __device__  double simpleComplexMod (const  simpleComplexDouble &a);
+
+__host__ __device__   simpleComplexDouble simpleComplexAdj (const  simpleComplexDouble &a);
+//__host__ __device__   simpleComplexDouble simpleComplexAdj (const  simpleComplexDouble &a);
+
+
+__host__ __device__   simpleComplexDouble sqrt(const  simpleComplexDouble &a);
+//__host__ __device__   simpleComplexDouble reciprocal(const  simpleComplexDouble &a);
+
+//__host__ __device__  float sqrt(const float &a);
+//__host__ __device__  float reciprocal(const float &a);
+
+//__host__ __device__  double sqrt(const double &a);
+//__host__ __device__  double reciprocal(const double &a);
+
+__host__ __device__   simpleComplexDouble make_simpleComplexDouble (double r, double i);
+
 
 #endif // __cplxNum_h__

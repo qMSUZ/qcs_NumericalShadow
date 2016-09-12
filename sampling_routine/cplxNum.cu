@@ -467,7 +467,208 @@ __host__ __device__  simpleComplexFloat make_simpleComplexFloat (float r, float 
 	return t;
 }
 
+
+/* specialised version of double type*/
+
+__host__ __device__ simpleComplexDouble operator+(const simpleComplexDouble &a, const simpleComplexDouble &b)
+{
+	simpleComplexDouble t;
+
+	t.x = a.x + b.x;
+	t.y = a.y + b.y;
+
+	return t;
+}
+
+__host__ __device__ simpleComplexDouble operator-(const simpleComplexDouble &a, const simpleComplexDouble &b)
+{
+	simpleComplexDouble t;
+
+	t.x = a.x - b.x;
+	t.y = a.y - b.y;
+
+	return t;
+}
+
+__host__ __device__ simpleComplexDouble operator+(const double &a, const simpleComplexDouble &b)
+{
+	simpleComplexDouble t;
+
+	t.x = a + b.x;
+	t.y = b.y;
+
+	return t;
+}
+
+__host__ __device__  simpleComplexDouble operator-(const double &a, const simpleComplexDouble &b)
+{
+	simpleComplexDouble t;
+
+	t.x = a - b.x;
+	t.y = b.y;
+
+	return t;
+}
+
+__host__ __device__  simpleComplexDouble operator+(const simpleComplexDouble &a, const double &b)
+{
+	simpleComplexDouble t;
+
+	t.x = a.x + b;
+	t.y = a.y ;
+
+	return t;
+}
+
+__host__ __device__  simpleComplexDouble operator-(const simpleComplexDouble &a, const double &b)
+{
+	simpleComplexDouble t;
+
+	t.x = a.x - b;
+	t.y = a.y ;
+
+	return t;
+}
+
+__host__ __device__  simpleComplexDouble operator*(const simpleComplexDouble &a, const simpleComplexDouble &b)
+{
+	simpleComplexDouble t;
+
+	t.x = (a.x * b.x) - (a.y * b.y);
+	t.y = (a.x * b.y) + (a.y * b.x);
+
+	return t;
+}
+
+__host__ __device__  simpleComplexDouble operator*(const double &a, const simpleComplexDouble &b)
+{
+	simpleComplexDouble t;
+
+	t.x = (a * b.x);
+	t.y = (a * b.y);
+
+	return t;
+}
+
+__host__ __device__  simpleComplexDouble operator*(const simpleComplexDouble &a, const double &b)
+{
+	simpleComplexDouble t;
+
+	t.x = (a.x * b);
+	t.y = (a.y * b);
+
+	return t;
+}
+
+__host__ __device__  simpleComplexDouble operator/(const simpleComplexDouble &a, const simpleComplexDouble &b)
+{
+	simpleComplexDouble t;
+
+	double s =  (b.x * b.x) + (b.y * b.y);
+
+	t.x = ((a.x * b.x) + (a.y * b.y)) / s;
+	t.y = ((a.y * b.x) - (a.x * b.y)) / s;
+
+	return t;
+}
+
+__host__ __device__  simpleComplexDouble operator/(const double &_a, const simpleComplexDouble &b)
+{
+	simpleComplexDouble t, a;
+
+	a.x = _a;
+	a.y = 0.0f;
+
+	double s =  (b.x * b.x) + (b.y * b.y);
+
+	t.x = ((a.x * b.x) + (a.y * b.y)) / s;
+	t.y = ((a.y * b.x) - (a.x * b.y)) / s;
+
+	return t;
+}
+
+__host__ __device__  simpleComplexDouble operator/(const simpleComplexDouble &a, const double &_b)
+{
+	simpleComplexDouble t, b;
+
+    b.x = _b;
+    b.y = 0.0;
+
+	double s =  (b.x * b.x) + (b.y * b.y);
+
+	t.x = ((a.x * b.x) + (a.y * b.y)) / s;
+	t.y = ((a.y * b.x) - (a.x * b.y)) / s;
+
+	return t;
+}
+
+__host__ __device__ double simpleComplexMod (const simpleComplexDouble &a)
+{
+	double f;
+
+	f = sqrt( (a.x * a.x) + (a.y * a.y) );
+
+	return f;
+}
+
+__host__ __device__  simpleComplexDouble sqrt(const simpleComplexDouble &a)
+{
+	double modval;
+	simpleComplexDouble tmp;
+
+	modval = simpleComplexMod(a);
+
+	tmp.x = sqrt( (modval + a.x) * 0.5f );
+	tmp.y = sqrt( (modval - a.x) * 0.5f );
+
+	return tmp;
+}
+
+__host__ __device__   simpleComplexDouble simpleComplexAdj(const  simpleComplexDouble &a)
+{
+	 simpleComplexDouble t;
+
+	t.x = a.x;
+	t.y = -a.y;
+
+	return t;
+}
+
 /*
+__host__ __device__   simpleComplexDouble simpleComplexAdj(const  simpleComplexDouble &a)
+{
+	 simpleComplexDouble t;
+
+	t.x = a.x;
+	t.y = -a.y;
+
+	return t;
+}
+*/
+
+__host__ __device__   simpleComplexDouble reciprocal(const  simpleComplexDouble &a)
+{
+	 simpleComplexDouble t;
+
+	t.x = a.x / (a.x * a.x + a.y*a.y);
+	t.y = -(a.y / (a.x * a.x + a.y*a.y));
+
+	return t;
+}
+
+/*
+__host__ __device__   simpleComplexDouble reciprocal(const  simpleComplexDouble &a)
+{
+	 simpleComplexDouble t;
+
+	t.x = a.x / (a.x * a.x + a.y*a.y);
+	t.y = -(a.y / (a.x * a.x + a.y*a.y));
+
+	return t;
+}
+*/
+
+
 __host__ __device__  simpleComplexDouble make_simpleComplexFloat (double r, double i)
 {
 	 simpleComplexDouble t;
@@ -477,4 +678,4 @@ __host__ __device__  simpleComplexDouble make_simpleComplexFloat (double r, doub
 
 	return t;
 }
-*/
+
